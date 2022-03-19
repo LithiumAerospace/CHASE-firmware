@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.SpaceWireCODECIPPackage.all;
@@ -41,12 +40,12 @@ entity SpaceWireCODECIP is
         transmitFIFOWriteEnable     : in  std_logic;
         transmitFIFODataIn          : in  std_logic_vector(8 downto 0);
         transmitFIFOFull            : out std_logic;
-        transmitFIFODataCount       : out std_logic_vector(5 downto 0);
+        transmitFIFODataCount       : out unsigned(5 downto 0);
         receiveFIFOReadEnable       : in  std_logic;
         receiveFIFODataOut          : out std_logic_vector(8 downto 0);
         receiveFIFOFull             : out std_logic;
         receiveFIFOEmpty            : out std_logic;
-        receiveFIFODataCount        : out std_logic_vector(5 downto 0);
+        receiveFIFODataCount        : out unsigned(5 downto 0);
 --
         tickIn                      : in  std_logic;
         timeIn                      : in  std_logic_vector(5 downto 0);
@@ -60,9 +59,9 @@ entity SpaceWireCODECIP is
         autoStart                   : in  std_logic;
         linkStatus                  : out std_logic_vector(15 downto 0);
         errorStatus                 : out std_logic_vector(7 downto 0);
-        transmitClockDivideValue    : in  std_logic_vector(5 downto 0);
-        creditCount                 : out std_logic_vector(5 downto 0);
-        outstandingCount            : out std_logic_vector(5 downto 0);
+        transmitClockDivideValue    : in  unsigned(5 downto 0);
+        creditCount                 : out unsigned(5 downto 0);
+        outstandingCount            : out unsigned(5 downto 0);
 --
         transmitActivity            : out std_logic;
         receiveActivity             : out std_logic;
@@ -71,7 +70,7 @@ entity SpaceWireCODECIP is
         spaceWireStrobeOut          : out std_logic;
         spaceWireDataIn             : in  std_logic;
         spaceWireStrobeIn           : in  std_logic;
---                
+--
         statisticalInformationClear : in  std_logic;
         statisticalInformation      : out bit32X8Array
 
@@ -91,8 +90,8 @@ architecture Behavioral of SpaceWireCODECIP is
             readDataOut    : out std_logic_vector(8 downto 0);
             empty          : out std_logic;
             full           : out std_logic;
-            readDataCount  : out std_logic_vector(5 downto 0);
-            writeDataCount : out std_logic_vector(5 downto 0)
+            readDataCount  : out unsigned(5 downto 0);
+            writeDataCount : out unsigned(5 downto 0)
             );
     end component;
 
@@ -101,7 +100,7 @@ architecture Behavioral of SpaceWireCODECIP is
             gDisconnectCountValue     : integer                       := 141;
             gTimer6p4usValue          : integer                       := 640;
             gTimer12p8usValue         : integer                       := 1280;
-            gTransmitClockDivideValue : std_logic_vector (5 downto 0) := "001001"
+            gTransmitClockDivideValue : unsigned (5 downto 0) := "001001"
             );
         port (
             clock                       : in  std_logic;
@@ -123,9 +122,9 @@ architecture Behavioral of SpaceWireCODECIP is
             transmitData                : in  std_logic_vector (7 downto 0);
             transmitDataControlFlag     : in  std_logic;
             transmitReady               : out std_logic;
-            transmitClockDivideValue    : in  std_logic_vector(5 downto 0);
-            creditCount                 : out std_logic_vector (5 downto 0);
-            outstndingCount             : out std_logic_vector (5 downto 0);
+            transmitClockDivideValue    : in  unsigned (5 downto 0);
+            creditCount                 : out unsigned (5 downto 0);
+            outstndingCount             : out unsigned (5 downto 0);
             -- receiver.
             receiveClock                : in  std_logic;
             tickOut                     : out std_logic;
@@ -134,7 +133,7 @@ architecture Behavioral of SpaceWireCODECIP is
             receiveFIFOWriteEnable1     : out std_logic;
             receiveData                 : out std_logic_vector (7 downto 0);
             receiveDataControlFlag      : out std_logic;
-            receiveFIFOCount            : in  std_logic_vector(5 downto 0);
+            receiveFIFOCount            : in  unsigned(5 downto 0);
             -- serial i/o.
             spaceWireDataOut            : out std_logic;
             spaceWireStrobeOut          : out std_logic;
@@ -176,7 +175,7 @@ architecture Behavioral of SpaceWireCODECIP is
     signal receiveFIFOWriteEnable1            : std_logic;
     signal receiveData                        : std_logic_vector (7 downto 0);
     signal receiveDataControlFlag             : std_logic;
-    signal receiveFIFOCount                   : std_logic_vector(5 downto 0);
+    signal receiveFIFOCount                   : unsigned(5 downto 0);
     signal iTransmitFIFOReadEnable            : std_logic;
     signal transmitFIFOEmpty                  : std_logic;
     signal transmitFIFOReadData               : std_logic_vector (8 downto 0);
@@ -301,7 +300,7 @@ begin
 ----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 11.4  Link error recovery.
 -- If previous character was NOT EOP, then add EEP (error end of
--- packet) to the receiver buffer, when detect Error(SpaceWireReset) while 
+-- packet) to the receiver buffer, when detect Error(SpaceWireReset) while
 -- receiving the Receive packet.
 ----------------------------------------------------------------------
     process (receiveClock, reset)
@@ -334,7 +333,7 @@ begin
         end if;
     end process;
 
-----------------------------------------------------------------------   
+----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 11.4 Link error recovery.
 -- Delete data in the  transmitter buffer until the next EOP,
 -- when detect  Error (SpaceWireReset) while sending
@@ -425,6 +424,5 @@ begin
             end if;
         end if;
     end process;
-    
-end Behavioral;
 
+end Behavioral;

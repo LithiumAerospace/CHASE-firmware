@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.SpaceWireCODECIPPackage.all;
@@ -82,9 +81,9 @@ entity SpaceWireRouterIPSpaceWirePort is
         linkReset                   : in  std_logic;
         linkStatus                  : out std_logic_vector (15 downto 0);
         errorStatus                 : out std_logic_vector (7 downto 0);
-        transmitClockDivide         : in  std_logic_vector (5 downto 0);
-        creditCount                 : out std_logic_vector (5 downto 0);
-        outstandingCount            : out std_logic_vector (5 downto 0);
+        transmitClockDivide         : in  unsigned (5 downto 0);
+        creditCount                 : out unsigned (5 downto 0);
+        outstandingCount            : out unsigned (5 downto 0);
         -- SpaceWire Data-Strobe.
         spaceWireDataOut            : out std_logic;
         spaceWireStrobeOut          : out std_logic;
@@ -111,12 +110,12 @@ architecture behavioral of SpaceWireRouterIPSpaceWirePort is
             transmitFIFOWriteEnable     : in  std_logic;
             transmitFIFODataIn          : in  std_logic_vector (8 downto 0);
             transmitFIFOFull            : out std_logic;
-            transmitFIFODataCount       : out std_logic_vector (5 downto 0);
+            transmitFIFODataCount       : out unsigned (5 downto 0);
             receiveFIFOReadEnable       : in  std_logic;
             receiveFIFODataOut          : out std_logic_vector (8 downto 0);
             receiveFIFOFull             : out std_logic;
             receiveFIFOEmpty            : out std_logic;
-            receiveFIFODataCount        : out std_logic_vector (5 downto 0);
+            receiveFIFODataCount        : out unsigned (5 downto 0);
             -- TimeCode.
             tickIn                      : in  std_logic;
             timeIn                      : in  std_logic_vector (5 downto 0);
@@ -130,9 +129,9 @@ architecture behavioral of SpaceWireRouterIPSpaceWirePort is
             autoStart                   : in  std_logic;
             linkStatus                  : out std_logic_vector (15 downto 0);
             errorStatus                 : out std_logic_vector (7 downto 0);
-            transmitClockDivideValue    : in  std_logic_vector (5 downto 0);
-            creditCount                 : out std_logic_vector (5 downto 0);
-            outstandingCount            : out std_logic_vector (5 downto 0);
+            transmitClockDivideValue    : in  unsigned (5 downto 0);
+            creditCount                 : out unsigned (5 downto 0);
+            outstandingCount            : out unsigned (5 downto 0);
             -- LED.
             transmitActivity            : out std_logic;
             receiveActivity             : out std_logic;
@@ -151,11 +150,11 @@ architecture behavioral of SpaceWireRouterIPSpaceWirePort is
 --
     signal iTransmitFIFOWriteEnable : std_logic;
     signal iTransmitFIFODataIn      : std_logic_vector (8 downto 0);
-    signal transmitFIFOCount        : std_logic_vector (5 downto 0);
+    signal transmitFIFOCount        : unsigned (5 downto 0);
     signal transmitFIFOFull         : std_logic;
     signal iReceiveFIFOReadEnable   : std_logic;
     signal receiveFIFODataOut       : std_logic_vector (8 downto 0);
-    signal receiveFIFOCount         : std_logic_vector (5 downto 0);
+    signal receiveFIFOCount         : unsigned (5 downto 0);
     signal receiveFIFOEmpty         : std_logic;
 --
     signal iTimeIn                  : std_logic_vector (5 downto 0);
@@ -163,7 +162,7 @@ architecture behavioral of SpaceWireRouterIPSpaceWirePort is
     signal timeOut                  : std_logic_vector (5 downto 0);
     signal controlFlagsOut          : std_logic_vector (1 downto 0);
     signal iReceiveFIFOReady        : std_logic;
-    
+
     type busStateMachine is (
         busStateIdle,
         busStatedestination0,
@@ -306,7 +305,7 @@ begin
             iRoutingTableRequest   <= '0';
             iWatchdogClear         <= '0';
             iPacketDropped         <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             case busState is
 
@@ -383,7 +382,7 @@ begin
                         busState <= busStateRoutingTable1;
                     end if;
                 ----------------------------------------------------------------------
-                --@ECSS-E-ST-50-12C 10.6.3 Logical addressing 
+                -- ECSS-E-ST-50-12C 10.6.3 Logical addressing
                 -- Request to the data which read from a routing table.
                 ----------------------------------------------------------------------
                 when busStateRoutingTable1 =>
@@ -504,7 +503,7 @@ begin
                 when others => null;
             end case;
         end if;
-        
+
     end process;
 
     destinationPortOut      <= iDestinationPortOut;
@@ -518,8 +517,8 @@ begin
     busMasterWriteEnableOut <= '0';
     busMasterByteEnableOut  <= "1111";
     busMasterDataOut        <= (others => '0');
-    
-    
+
+
     watchdogTimerCount : SpaceWireRouterIPTimeOutCount port map (
         clock             => clock,
         reset             => reset,
@@ -546,5 +545,5 @@ begin
 --
     iTransmitFIFOReady       <= '1'               when transmitFIFOCount < "110000" else '0';
     iReadyOut                <= '0'               when eepWait = '1'                else iTransmitFIFOReady;
-    
+
 end behavioral;

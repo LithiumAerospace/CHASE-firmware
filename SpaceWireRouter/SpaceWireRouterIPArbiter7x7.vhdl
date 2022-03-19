@@ -24,9 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
-
+use ieee.numeric_std.all;
 ------- switch --------
 --
 --      0 1 2 3 4 5 6
@@ -325,8 +323,7 @@ end behavioral;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPRoundArbiter7 is
     port (
@@ -527,7 +524,7 @@ begin
             if (irequest4 = '0' and iGranted (4) = '1') then iGranted (4) <= '0'; end if;
             if (irequest5 = '0' and iGranted (5) = '1') then iGranted (5) <= '0'; end if;
             if (irequest6 = '0' and iGranted (6) = '1') then iGranted (6) <= '0'; end if;
-            
+
         end if;
 
     end process;

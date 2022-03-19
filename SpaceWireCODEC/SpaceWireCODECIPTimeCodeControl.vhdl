@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireCODECIPTimeCodeControl is
 
@@ -87,7 +86,7 @@ begin
                 if (gotTimeCodeSynchronized = '1') then
                     iControlFlags         <= iReceiveTimeCodeOutRegister (7 downto 6);
                     iReceiveTimeCode      <= iReceiveTimeCodeOutRegister (5 downto 0);
-                    iReceiveTimeCodePlus1 <= iReceiveTimeCodeOutRegister (5 downto 0) + 1;
+                    iReceiveTimeCodePlus1 <= std_logic_vector(to_unsigned(to_integer(unsigned(iReceiveTimeCodeOutRegister (5 downto 0))) + 1, 6));
                     if (iReceiveTimeCodePlus1 = iReceiveTimeCodeOutRegister (5 downto 0)) then
                         iTickOutSignal <= '1';
                     end if;
@@ -109,5 +108,3 @@ begin
             );
 
 end Behavioral;
-
-

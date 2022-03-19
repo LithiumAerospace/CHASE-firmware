@@ -24,18 +24,17 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPCreditCount is
     port (
         clock                       : in  std_logic;
         transmitClock               : in  std_logic;
         reset                       : in  std_logic;
-        creditCount                 : in  std_logic_vector (5 downto 0);
-        outstndingCount             : in  std_logic_vector (5 downto 0);
-        creditCountSynchronized     : out std_logic_vector (5 downto 0);
-        outstndingCountSynchronized : out std_logic_vector (5 downto 0)
+        creditCount                 : in  unsigned (5 downto 0);
+        outstndingCount             : in  unsigned (5 downto 0);
+        creditCountSynchronized     : out unsigned (5 downto 0);
+        outstndingCountSynchronized : out unsigned (5 downto 0)
         );
 end SpaceWireRouterIPCreditCount;
 
@@ -51,13 +50,13 @@ architecture behavioral of SpaceWireRouterIPCreditCount is
             );
     end component;
 
-    signal iTransmitClockCounter        : std_logic_vector (3 downto 0);
+    signal iTransmitClockCounter        : unsigned (3 downto 0);
     signal iDataLatchEnable             : std_logic;
-    signal iCreditCountLatched          : std_logic_vector (5 downto 0);
-    signal iOutstndingCountLatched      : std_logic_vector (5 downto 0);
+    signal iCreditCountLatched          : unsigned (5 downto 0);
+    signal iOutstndingCountLatched      : unsigned (5 downto 0);
     signal synchronousEnable            : std_logic;
-    signal iCreditCountSynchronized     : std_logic_vector(5 downto 0);
-    signal iOutstndingCountSynchronized : std_logic_vector(5 downto 0);
+    signal iCreditCountSynchronized     : unsigned(5 downto 0);
+    signal iOutstndingCountSynchronized : unsigned(5 downto 0);
 
 begin
 

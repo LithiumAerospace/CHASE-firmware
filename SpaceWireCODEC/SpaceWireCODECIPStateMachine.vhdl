@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireCODECIPStateMachine is
     port (
@@ -106,7 +105,7 @@ architecture Behavioral of SpaceWireCODECIPStateMachine is
     signal iLinkDownTransition      : std_logic;
     signal iLinkUpEnable            : std_logic;
     signal creditSynchronize        : std_logic;
-    
+
 begin
 
     gotNullPulse : SpaceWireCODECIPSynchronizeOnePulse
@@ -195,7 +194,7 @@ begin
             iLinkDownTransition     <= '0';
             iLinkUpTransition       <= '0';
             iLinkUpEnable           <= '0';
-            
+
         elsif (Clock'event and Clock = '1') then
             case linkState is
 
@@ -259,9 +258,9 @@ begin
                 -- ECSS-E-ST-50-12C 8.5.2.4 Ready.
                 -- The state machine shall wait in the Ready state until the [Link Enabled]
                 -- guard becomes true and then it shall move on into the Started state.
-                -- If, while in the Ready state, a disconnection error is detected, or if 
-                -- after thegotNULL condition is set, a parity error or escape error occurs, 
-                -- or any character other than a NULL is received, then the state machine 
+                -- If, while in the Ready state, a disconnection error is detected, or if
+                -- after thegotNULL condition is set, a parity error or escape error occurs,
+                -- or any character other than a NULL is received, then the state machine
                 -- shall move to the ErrorReset state.
                 ----------------------------------------------------------------------
                 when linkStateReady =>
@@ -285,8 +284,8 @@ begin
                 -- ECSS-E-ST-50-12C 8.5.2.5 Started.
                 -- The state machine shall move to the Connecting state if the gotNULL
                 -- condition is set.
-                -- If, while in the Started state, a disconnection error is detected, or if 
-                -- after the gotNULL condition is set, a parity error or escape error occurs, 
+                -- If, while in the Started state, a disconnection error is detected, or if
+                -- after the gotNULL condition is set, a parity error or escape error occurs,
                 -- or any character other than a NULL is received, then the state machine shall
                 -- move to the ErrorReset state.
                 ----------------------------------------------------------------------
@@ -319,9 +318,9 @@ begin
                 -- ECSS-E-ST-50-12C 8.5.2.6 Connecting
                 -- If an FCT is received (gotFCT condition true) the state machine shall
                 -- move to the Run state.
-                -- If, while in the Connecting state, a disconnect error, parity error or 
-                -- escape error is detected, or if any character other than NULL or 
-                -- FCT is received, then the state machine shall move to the ErrorReset 
+                -- If, while in the Connecting state, a disconnect error, parity error or
+                -- escape error is detected, or if any character other than NULL or
+                -- FCT is received, then the state machine shall move to the ErrorReset
                 -- state.
                 ----------------------------------------------------------------------
                 when linkStateConnecting =>
@@ -349,7 +348,7 @@ begin
 
                 ----------------------------------------------------------------------
                 -- ECSS-E-ST-50-12C 8.5.2.7 Run
-                -- In the Run state the receiver is enabled and the transmitter is 
+                -- In the Run state the receiver is enabled and the transmitter is
                 -- enabled to send Time-Codes, FCTs, N-Chars and NULLs.
                 -- If  a disconnection error, parity error, ESC error occur, then the state machine
                 -- shall move to the ErrorResetState.

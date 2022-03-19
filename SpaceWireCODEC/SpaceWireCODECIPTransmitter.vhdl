@@ -24,12 +24,11 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireCODECIPTransmitter is
     generic (
-        gInitializeTransmitClockDivideValue : std_logic_vector (5 downto 0) := "001001"
+        gInitializeTransmitClockDivideValue : unsigned (5 downto 0) := "001001"
         );
 
     port (
@@ -53,11 +52,11 @@ entity SpaceWireCODECIPTransmitter is
         sendTimeCodes            : in  std_logic;
         gotFCT                   : in  std_logic;
         gotNCharacter            : in  std_logic;
-        receiveFIFOCount         : in  std_logic_vector(5 downto 0);
+        receiveFIFOCount         : in  unsigned(5 downto 0);
         creditError              : out std_logic;
-        transmitClockDivide      : in  std_logic_vector(5 downto 0);
-        creditCountOut           : out std_logic_vector (5 downto 0);
-        outstandingCountOut      : out std_logic_vector (5 downto 0);
+        transmitClockDivide      : in  unsigned(5 downto 0);
+        creditCountOut           : out unsigned(5 downto 0);
+        outstandingCountOut      : out unsigned(5 downto 0);
         spaceWireResetOut        : in  std_logic;
         transmitEEPAsynchronous  : out std_logic;
         TransmitEOPAsynchronous  : out std_logic;
@@ -87,7 +86,7 @@ architecture Behavioral of SpaceWireCODECIPTransmitter is
 
     signal transmitState : transmitStateMachine;
 
-    signal iDivideCount                    : std_logic_vector(5 downto 0);
+    signal iDivideCount                    : unsigned(5 downto 0);
     signal iDivideState                    : std_logic;
     signal iTransmitParity                 : std_logic;
     signal iNullSend                       : std_logic;
@@ -97,7 +96,7 @@ architecture Behavioral of SpaceWireCODECIPTransmitter is
     signal iSendStart                      : std_logic;
     signal iSendDone                       : std_logic;
     signal iSendData                       : std_logic_vector(8 downto 0);
-    signal iSendCount                      : std_logic_vector(3 downto 0);
+    signal iSendCount                      : unsigned(3 downto 0);
     signal transmitDataEnableSynchronized  : std_logic;
     signal iDecrementCredit                : std_logic;
     signal iTransmitFCTStart               : std_logic;
@@ -108,15 +107,15 @@ architecture Behavioral of SpaceWireCODECIPTransmitter is
     signal iTransmitTimeCodeState          : std_logic;
     signal gotNCharacterSynchronized       : std_logic;
     signal iGotNCharacterSynchronizedDelay : std_logic_vector (9 downto 0);
-    signal iOutstandingCount               : std_logic_vector (5 downto 0);
-    signal iReceiveFIFOCountBuffer0        : std_logic_vector (5 downto 0);
-    signal iReceiveFIFOCountBuffer1        : std_logic_vector (5 downto 0);
-    signal iReceiveFIFOCountBuffer         : std_logic_vector (5 downto 0);
+    signal iOutstandingCount               : unsigned (5 downto 0);
+    signal iReceiveFIFOCountBuffer0        : unsigned (5 downto 0);
+    signal iReceiveFIFOCountBuffer1        : unsigned (5 downto 0);
+    signal iReceiveFIFOCountBuffer         : unsigned (5 downto 0);
     signal iTransmitFCTState               : std_logic;
     signal iTransmitDataBuffer             : std_logic_vector (7 downto 0);
     signal iTransmitDataControlFlagBuffer  : std_logic;
     signal gotFCTSynchronized              : std_logic;
-    signal iTransmitCreditCount            : std_logic_vector (6 downto 0);
+    signal iTransmitCreditCount            : unsigned (6 downto 0);
     signal iCreditErrorNCharactorOverFlow  : std_logic;
     signal iCreditErrorFCTOverFlow         : std_logic;
     signal iTransmitReady                  : std_logic;
@@ -124,13 +123,13 @@ architecture Behavioral of SpaceWireCODECIPTransmitter is
     signal iTimeInBuffer                   : std_logic_vector (5 downto 0) := "000000";
     signal iFirstNullSend                  : std_logic;
     signal iResetIn                        : std_logic;
-    signal iClockDivideRegister            : std_logic_vector (5 downto 0);
+    signal iClockDivideRegister            : unsigned (5 downto 0);
     signal iTransmitEEPAsynchronous        : std_logic;
     signal iTransmitEOPAsynchronous        : std_logic;
     signal iTransmitByteAsynchronous       : std_logic;
     signal iCreditOverFlow                 : std_logic;
-    
-    
+
+
 begin
 
     iResetIn                 <= reset or spaceWireResetOut;
@@ -199,7 +198,7 @@ begin
         elsif (transmitClock'event and transmitClock = '1') then
             if (transmitDataEnable = '1') then
                 if (transmitDataControlFlag = '1') then
-                    
+
                     if (transmitData(0) = '0') then
                         --EOP Transmit.
                         iTransmitEOPAsynchronous <= '1';
@@ -222,8 +221,8 @@ begin
 ----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 8.4.2 Transmitter
 -- When the TICK_IN signal is asserted the transmitter sends out a Time-Code
--- as soon as the transmitter has finished sending the current character or 
--- control code. The value of the Time-Code is the value of the TIME_IN and 
+-- as soon as the transmitter has finished sending the current character or
+-- control code. The value of the Time-Code is the value of the TIME_IN and
 -- CONTROL-FLAGS_IN signals at the point in time when TICK_IN is asserted.
 ----------------------------------------------------------------------
     process (transmitClock, iResetIn)
@@ -255,7 +254,7 @@ begin
 ----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 8.3 Flow control (normative)
 -- Receives an FCT its transmitter increments the credit count by eight.
--- Whenever the transmitter sends an N-Char it decrements the credit count 
+-- Whenever the transmitter sends an N-Char it decrements the credit count
 -- by one.
 ----------------------------------------------------------------------
     process (transmitClock, iResetIn)
@@ -325,7 +324,7 @@ begin
     end process;
 
 ----------------------------------------------------------------------
--- Synchronized input signal to transmitClock. 
+-- Synchronized input signal to transmitClock.
 ----------------------------------------------------------------------
     process (transmitClock, iResetIn)
     begin
@@ -387,7 +386,7 @@ begin
             ----------------------------------------------------------------------
             -- ECSS-E-ST-50-12C 8.5.3.8 CreditError
             -- Credit error occurs if data is received when the
-            -- host system is not expecting any more data.                   
+            -- host system is not expecting any more data.
             ----------------------------------------------------------------------
             if (iGotNCharacterSynchronizedDelay (9) = '1' and iOutstandingCount = "000000") then
                 iCreditErrorNCharactorOverFlow <= '1';
@@ -398,7 +397,7 @@ begin
     end process;
 
 ----------------------------------------------------------------------
--- Instract to start Transmit and load data to buffer after read the data from 
+-- Instract to start Transmit and load data to buffer after read the data from
 -- TransmitFIFO.
 ----------------------------------------------------------------------
     process (transmitClock, iResetIn)
@@ -421,7 +420,7 @@ begin
 
 ----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 6.6.5 Initial operating data signalling rate
--- After a reset the SpaceWire link transmitter shall initially commence 
+-- After a reset the SpaceWire link transmitter shall initially commence
 -- operating at a data signalling rate of (10±1) Mb/s.
 ----------------------------------------------------------------------
     process (transmitClock, reset)
@@ -459,8 +458,8 @@ begin
 
 ----------------------------------------------------------------------
 -- ECSS-E-ST-50-12C 8.4.2 Transmitter
--- The data is convoert to serial after stored in shift register, Transmit Tx as 
--- DS signal. 
+-- The data is convoert to serial after stored in shift register, Transmit Tx as
+-- DS signal.
 -- Generate odd parity and Transmit Null data automatically.
 ----------------------------------------------------------------------
     process (transmitClock, reset)
@@ -479,12 +478,12 @@ begin
             iFirstNullSend        <= '0';
             iSendCount            <= (others => '0');
             iSendData             <= (others => '0');
-            
+
 
         elsif (transmitClock'event and transmitClock = '1') then
             if (iDivideState = '1') then
                 case transmitState is
-                    
+
                     when transmitStateStop =>
                         if (enableTransmit = '1' and sendNulls = '1') then
                             transmitState <= transmitStateParity;
@@ -672,4 +671,3 @@ begin
         end if;
     end process;
 end Behavioral;
-

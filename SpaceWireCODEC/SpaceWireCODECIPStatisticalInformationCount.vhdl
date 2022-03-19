@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.SpaceWireCODECIPPackage.all;
@@ -37,7 +36,7 @@ entity SpaceWireCODECIPStatisticalInformationCount is
         statisticalInformationClear : in  std_logic;
         transmitClock               : in  std_logic;
         receiveClock                : in  std_logic;
---                
+--
         receiveEEPAsynchronous      : in  std_logic;
         receiveEOPAsynchronous      : in  std_logic;
         receiveByteAsynchronous     : in  std_logic;
@@ -45,14 +44,14 @@ entity SpaceWireCODECIPStatisticalInformationCount is
         transmitEEPAsynchronous     : in  std_logic;
         transmitEOPAsynchronous     : in  std_logic;
         transmitByteAsynchronous    : in  std_logic;
---                
+--
         linkUpTransition            : in  std_logic;
         linkDownTransition          : in  std_logic;
         linkUpEnable                : in  std_logic;
---                
+--
         nullSynchronous             : in  std_logic;
         fctSynchronous              : in  std_logic;
---                
+--
         statisticalInformation      : out bit32X8Array;
         characterMonitor            : out std_logic_vector(6 downto 0)
         );
@@ -71,15 +70,15 @@ architecture behavioral of SpaceWireCODECIPStatisticalInformationCount is
             );
     end component;
 
-    signal iTransmitEOPCount        : std_logic_vector (31 downto 0);
-    signal iReceiveEOPCount         : std_logic_vector (31 downto 0);
-    signal iTransmitEEPCount        : std_logic_vector (31 downto 0);
-    signal iReceiveEEPCount         : std_logic_vector (31 downto 0);
-    signal iTransmitByteCount       : std_logic_vector (31 downto 0);
-    signal iReceiveByteCount        : std_logic_vector (31 downto 0);
-    signal iLinkUpCount             : std_logic_vector (31 downto 0);
-    signal iLinkDownCount           : std_logic_vector (31 downto 0);
---      
+    signal iTransmitEOPCount        : unsigned (31 downto 0);
+    signal iReceiveEOPCount         : unsigned (31 downto 0);
+    signal iTransmitEEPCount        : unsigned (31 downto 0);
+    signal iReceiveEEPCount         : unsigned (31 downto 0);
+    signal iTransmitByteCount       : unsigned (31 downto 0);
+    signal iReceiveByteCount        : unsigned (31 downto 0);
+    signal iLinkUpCount             : unsigned (31 downto 0);
+    signal iLinkDownCount           : unsigned (31 downto 0);
+--
     signal iCharacterMonitor        : std_logic_vector (6 downto 0);
 --
     signal iReceiveEEPSynchronize   : std_logic;
@@ -88,7 +87,7 @@ architecture behavioral of SpaceWireCODECIPStatisticalInformationCount is
     signal iTransmitEEPSynchronize  : std_logic;
     signal iTransmitEOPSynchronize  : std_logic;
     signal iTransmitByteSynchronize : std_logic;
-    
+
 begin
 
     characterMonitor          <= iCharacterMonitor;
@@ -116,7 +115,7 @@ begin
 
 ----------------------------------------------------------------------
 -- Statistical Information Counter.
--- Transmit and Receive EOP, EEP, 1Byte, SpaceWireLinkUP and SpaceWireLinkDown 
+-- Transmit and Receive EOP, EEP, 1Byte, SpaceWireLinkUP and SpaceWireLinkDown
 -- Increment Counter.
 -- Status Information
 -- Receive EOP, EEP, FCT, Null and 1Byte One Shot Pulse
@@ -135,13 +134,13 @@ begin
         else
             if (clock'event and clock = '1') then
                 if (iTransmitEEPSynchronize = '1') then
-                    iTransmitEEPCount <= iTransmitEEPCount + '1';
+                    iTransmitEEPCount <= iTransmitEEPCount + 1;
                 end if;
                 if (iTransmitEOPSynchronize = '1') then
-                    iTransmitEOPCount <= iTransmitEOPCount + '1';
+                    iTransmitEOPCount <= iTransmitEOPCount + 1;
                 end if;
                 if (iTransmitByteSynchronize = '1') then
-                    iTransmitByteCount <= iTransmitByteCount + '1';
+                    iTransmitByteCount <= iTransmitByteCount + 1;
                 end if;
             end if;
         end if;
@@ -159,13 +158,13 @@ begin
         else
             if (clock'event and clock = '1') then
                 if (iReceiveEEPSynchronize = '1') then
-                    iReceiveEEPCount <= iReceiveEEPCount + '1';
+                    iReceiveEEPCount <= iReceiveEEPCount + 1;
                 end if;
                 if (iReceiveEOPSynchronize = '1') then
-                    iReceiveEOPCount <= iReceiveEOPCount + '1';
+                    iReceiveEOPCount <= iReceiveEOPCount + 1;
                 end if;
                 if (iReceiveByteSynchronize = '1') then
-                    iReceiveByteCount <= iReceiveByteCount +'1';
+                    iReceiveByteCount <= iReceiveByteCount + 1;
                 end if;
             end if;
         end if;
@@ -182,10 +181,10 @@ begin
         else
             if (clock'event and clock = '1') then
                 if (linkUpTransition = '1') then
-                    iLinkUpCount <= iLinkUpCount + '1';
+                    iLinkUpCount <= iLinkUpCount + 1;
                 end if;
                 if (linkDownTransition = '1') then
-                    iLinkDownCount <= iLinkDownCount + '1';
+                    iLinkDownCount <= iLinkDownCount + 1;
                 end if;
             end if;
         end if;
@@ -193,7 +192,7 @@ begin
 
 -------------------------------------------------------------
 -------------------------------------------------------------
--------------------------------------------------------------    
+-------------------------------------------------------------
     receiveEEPPulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
             clock             => clock,
@@ -201,7 +200,7 @@ begin
             reset             => reset,
             asynchronousIn    => receiveEEPAsynchronous,
             synchronizedOut   => iReceiveEEPSynchronize
-            );   
+            );
 
     receiveEOPPulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
@@ -210,7 +209,7 @@ begin
             reset             => reset,
             asynchronousIn    => receiveEOPAsynchronous,
             synchronizedOut   => iReceiveEOPSynchronize
-            );  
+            );
 
     receiveBytePulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
@@ -219,7 +218,7 @@ begin
             reset             => reset,
             asynchronousIn    => receiveByteAsynchronous,
             synchronizedOut   => iReceiveByteSynchronize
-            );  
+            );
 
     transmitEEPPulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
@@ -228,7 +227,7 @@ begin
             reset             => reset,
             asynchronousIn    => transmitEEPAsynchronous,
             synchronizedOut   => iTransmitEEPSynchronize
-            );  
+            );
 
     transmitEOPPulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
@@ -237,7 +236,7 @@ begin
             reset             => reset,
             asynchronousIn    => transmitEOPAsynchronous,
             synchronizedOut   => iTransmitEOPSynchronize
-            );  
+            );
 
     transmitBytePulse : SpaceWireCODECIPSynchronizeOnePulse
         port map (
@@ -246,6 +245,6 @@ begin
             reset             => reset,
             asynchronousIn    => transmitByteAsynchronous,
             synchronizedOut   => iTransmitByteSynchronize
-            );                                  
+            );
 
 end behavioral;

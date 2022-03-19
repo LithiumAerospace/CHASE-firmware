@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.SpaceWireRouterIPPackage.all;
@@ -68,7 +67,7 @@ entity SpaceWireRouterIPTimeCodeControl6 is
         port6TimeCodeIn       : out std_logic_vector (7 downto 0);
         port6TickOut          : in  std_logic;
         port6TimeCodeOut      : in  std_logic_vector (7 downto 0);
---                
+--
         autoTimeCodeValue     : out std_logic_vector(7 downto 0);
         autoTimeCodeCycleTime : in  std_logic_vector(31 downto 0)
         );
@@ -76,7 +75,7 @@ end SpaceWireRouterIPTimeCodeControl6;
 
 
 architecture behavioral of SpaceWireRouterIPTimeCodeControl6 is
-    
+
     constant cInitializeTimeCode     : std_logic_vector (5 downto 0) := "000000";
     constant cInitializeControlFlags : std_logic_vector (1 downto 0) := "00";
 --
@@ -102,9 +101,9 @@ architecture behavioral of SpaceWireRouterIPTimeCodeControl6 is
     signal   iCycleCounter           : std_logic_vector (31 downto 0);
     signal   iAutoTickIn             : std_logic;
     signal   iAutoTimeCodeIn         : std_logic_vector (5 downto 0);
-    
+
 begin
-    
+
     receiveTimeCode <= iReceiveTimeCode;
 
     port1TickIn <= iPort1TickIn;
@@ -145,7 +144,7 @@ begin
 -- ECSS-E-ST-50-12C 8.12 System time distribution (normative)
 -- ECSS-E-ST-50-12C 7.3 Control characters and control codes
 -- TimeCode Host
--- Occur TimeCode and tick signal which is asserted periodically set value 
+-- Occur TimeCode and tick signal which is asserted periodically set value
 -- in AutoTimeCodeValueRegister.
 -- This TimeCode,tick signal is sending to all output ports of the router.
 -- TimeCode Target
@@ -157,13 +156,13 @@ begin
     begin
         if (reset = '1') then
             iTimeCodeOut         <= cInitializeTimeCode;
-            iTimeCodeOutPlus1    <= cInitializeTimeCode + 1;
+            iTimeCodeOutPlus1    <= std_logic_vector(unsigned(cInitializeTimeCode) + 1);
             iReceiveControlFlags <= "00";
             iTickOut             <= "000000";
-            
+
         elsif (clock'event and clock = '1') then
             ----------------------------------------------------------------------
-            -- TimeCode Host. 
+            -- TimeCode Host.
             ----------------------------------------------------------------------
             if (autoTimeCodeCycleTime /= x"00000000") then
                 if (iAutoTickIn = '1') then
@@ -181,7 +180,7 @@ begin
                         iTickOut <= "111110";
                     end if;
                     iTimeCodeOut         <= port1TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port1TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port1TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port1TimeCodeOut (7 downto 6);
 
                 ----------------------------------------------------------------------
@@ -192,7 +191,7 @@ begin
                         iTickOut <= "111101";
                     end if;
                     iTimeCodeOut         <= port2TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port2TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port2TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port2TimeCodeOut (7 downto 6);
 
                 ----------------------------------------------------------------------
@@ -203,7 +202,7 @@ begin
                         iTickOut <= "111011";
                     end if;
                     iTimeCodeOut         <= port3TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port3TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port3TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port3TimeCodeOut (7 downto 6);
 
                 ----------------------------------------------------------------------
@@ -214,7 +213,7 @@ begin
                         iTickOut <= "110111";
                     end if;
                     iTimeCodeOut         <= port4TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port4TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port4TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port4TimeCodeOut (7 downto 6);
 
                 ----------------------------------------------------------------------
@@ -225,7 +224,7 @@ begin
                         iTickOut <= "101111";
                     end if;
                     iTimeCodeOut         <= port5TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port5TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port5TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port5TimeCodeOut (7 downto 6);
 
                 ----------------------------------------------------------------------
@@ -236,12 +235,12 @@ begin
                         iTickOut <= "011111";
                     end if;
                     iTimeCodeOut         <= port6TimeCodeOut (5 downto 0);
-                    iTimeCodeOutPlus1    <= port6TimeCodeOut (5 downto 0) + 1;
+                    iTimeCodeOutPlus1    <= std_logic_vector(unsigned(port6TimeCodeOut (5 downto 0)) + 1);
                     iReceiveControlFlags <= port6TimeCodeOut (7 downto 6);
-                    
+
                 else
                     iTickOut <= "000000";
-                    
+
                 end if;
             end if;
         end if;
@@ -259,18 +258,17 @@ begin
             iAutoTimeCodeIn <= "000000";
             iCycleCounter   <= (others => '0');
             iAutoTickIn     <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             if (autoTimeCodeCycleTime /= x"00000000") then
 
                 if (iCycleCounter > autoTimeCodeCycleTime) then
                     iCycleCounter   <= (others => '0');
                     iAutoTickIn     <= '1';
-                    iAutoTimeCodeIn <= iAutoTimeCodeIn + '1';
+                    iAutoTimeCodeIn <= std_logic_vector(unsigned(iAutoTimeCodeIn) + 1);
                 else
-                    iCycleCounter <= iCycleCounter + '1';
+                    iCycleCounter <= std_logic_vector(unsigned(iCycleCounter) + 1);
                     iAutoTickIn   <= '0';
-                    
                 end if;
             else
                 iAutoTickIn   <= '0';
@@ -279,6 +277,5 @@ begin
         end if;
     end process;
 -------------------------------------------------------------
-    
-end behavioral;
 
+end behavioral;

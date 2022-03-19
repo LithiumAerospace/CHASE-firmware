@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPTimeOutCount is
     port (
@@ -41,11 +40,11 @@ end SpaceWireRouterIPTimeOutCount;
 
 architecture behavioral of SpaceWireRouterIPTimeOutCount is
 
-    signal iMicroCount      : std_logic_vector (11 downto 0);
-    signal iTimeOutCount    : std_logic_vector (19 downto 0);
+    signal iMicroCount      : unsigned (11 downto 0);
+    signal iTimeOutCount    : unsigned (19 downto 0);
     signal iTimeOutOverFlow : std_logic;
     signal iTimeOutEEP      : std_logic;
-    
+
 begin
 
 ----------------------------------------------------------------------
@@ -60,11 +59,11 @@ begin
             iTimeOutCount    <= (others => '0');
             iTimeOutOverFlow <= '0';
             iTimeOutEEP      <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             if (clear = '1') then
                 iMicroCount      <= (others => '0');
-                iTimeOutCount    <= timeOutCountValue;
+                iTimeOutCount    <= unsigned(timeOutCountValue);
                 iTimeOutOverFlow <= '0';
             elsif (timeOutEnable = '1') then
                 iMicroCount <= iMicroCount + 1;
@@ -72,7 +71,7 @@ begin
                     if (iTimeOutCount = x"00000") then
                         iTimeOutOverFlow <= '1';
                         iTimeOutEEP      <= '1';
-                        iTimeOutCount    <= timeOutCountValue;
+                        iTimeOutCount    <= unsigned(timeOutCountValue);
                     else
                         iTimeOutCount <= iTimeOutCount - 1;
                     end if;
@@ -85,5 +84,5 @@ begin
 
     timeOutOverFlow <= iTimeOutOverFlow;
     timeOutEEP      <= iTimeOutEEP;
-    
+
 end behavioral;

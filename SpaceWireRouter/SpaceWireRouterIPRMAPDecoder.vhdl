@@ -28,8 +28,7 @@ use work.SpaceWireRouterIPPackage.all;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPRMAPDecoder is
     port (
@@ -77,7 +76,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
     constant RMAPProtocolID : std_logic_vector (7 downto 0) := "00000001";
 
     signal iDestinationPortOut : std_logic_vector (7 downto 0);
-    
+
     type commandStateMachine is (
         commandStateIdle,
         commandStateProtocolID,
@@ -96,7 +95,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
         commandStateWaitEOP
         );
     signal commandState : commandStateMachine;  -- command state.
-    
+
     type receiveCRCStateMachine is (
         receiveCRCStateIdle,
         receiveCRCStateRead0,
@@ -105,7 +104,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
         receiveCRCStateRead3
         );
     signal receiveCRCState : receiveCRCStateMachine;
-    
+
     type transmitCRCStateMachine is (
         transmitCRCStateIdle,
         transmitCRCStateWrite0,
@@ -113,7 +112,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
         transmitCRCStateWrite2
         );
     signal transmitCRCState : transmitCRCStateMachine;
-    
+
     type replyStateMachine is (
         replyStateIdle,
         replyStateDestinationPort,
@@ -139,8 +138,8 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
 --
     signal iPacketType                : std_logic;
     signal iRMAPCommand               : std_logic_vector (3 downto 0);
-    signal iReplyAddressSize          : std_logic_vector (1 downto 0);
-    signal iReplyAddressFieldCount    : std_logic_vector (1 downto 0);
+    signal iReplyAddressSize          : unsigned (1 downto 0);
+    signal iReplyAddressFieldCount    : unsigned (1 downto 0);
     signal iReplyAddressAvailable     : std_logic;
     signal iReplyAddressFieldReceive  : integer range 0 to 16;
     signal iReplyAddressFieldTransmit : integer range 0 to 16;
@@ -153,7 +152,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
     signal iMemoryAddressField        : std_logic_vector (1 downto 0);
     signal iRMAPDataLength            : std_logic_vector (23 downto 0);
     signal iDataLengthField           : std_logic_vector (1 downto 0);
-    signal iDataCount                 : std_logic_vector (23 downto 0);
+    signal iDataCount                 : unsigned (23 downto 0);
     signal iBusAccessStart            : std_logic;
     signal iBusAccessEnd              : std_logic;
     signal iReplyProcessing           : std_logic;
@@ -170,14 +169,14 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
     signal iReplyTransactionIDField   : std_logic;
     signal iReplyDataLengthField      : std_logic_vector (1 downto 0);
     signal iReplyDataLength           : std_logic_vector (23 downto 0);
-    signal iReplyDataCount            : std_logic_vector (23 downto 0);
+    signal iReplyDataCount            : unsigned (23 downto 0);
     signal iReplyDataSet              : std_logic;
     signal iReplySpaceWireAddressSet  : std_logic;
 --
     signal iControlWriteDataBuffer    : std_logic_vector (31 downto 0);
     signal iControlReadDataBuffer     : std_logic_vector (31 downto 0);
     signal iMaskData                  : std_logic_vector (31 downto 0);
-    
+
     type busStateMachine is (
         busStateIdle,
         busStateRead0,
@@ -256,7 +255,7 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
     signal iwatchdogReplyTimeOut : std_logic;
     signal iPacketDropped        : std_logic;
     signal iReadyOut             : std_logic;
-    
+
 begin
     packetDropped      <= iPacketDropped;
     readyOut           <= iReadyOut;
@@ -301,9 +300,9 @@ begin
             iDestinationPortOut       <= x"00";
             iControlWriteDataBuffer   <= (others => '0');
             iMaskData                 <= (others => '0');
-            
+
         elsif (clock'event and clock = '1') then
-            
+
             if (iReceiveDataReady = '1') then
                 case commandState is
 
@@ -356,7 +355,7 @@ begin
                         iDestinationPortOut <= sourcePortIn;
                         if (iReceiveControlFlag = '0') then
                             iRMAPCommand              <= iReceiveData (5 downto 2);
-                            iReplyAddressSize         <= iReceiveData (1 downto 0);
+                            iReplyAddressSize         <= unsigned(iReceiveData (1 downto 0));
                             iReplyAddressFieldCount   <= (others => '0');
                             iReplyAddressAvailable    <= '0';
                             iReplyAddressFieldReceive <= 0;
@@ -405,10 +404,10 @@ begin
                     -- ECSS-E-ST-50-11C 6.2.7 Initiator Logical Address field.
                     -- There is a reply address
                     -- Take Receive data into ReplyAddressSize buffer
-                    -- Reply Address field → Initiator Logical Address field → Transaction Identifier field.
+                    -- Reply Address field -> Initiator Logical Address field -> Transaction Identifier field.
                     -- No reply address
                     -- Take Receive data in InitiatorLogicalAddress buffer
-                    -- Initiator Logical Address field → Transaction Identifier field.
+                    -- Initiator Logical Address field -> Transaction Identifier field.
                     ----------------------------------------------------------------------
                     when commandStateReplyAddress =>
                         -- 5) if source require path address save path address.
@@ -436,7 +435,7 @@ begin
                                     iReplyAddress(iReplyAddressFieldReceive) <= iReceiveData;
                                     iReplyAddressFieldReceive                <= iReplyAddressFieldReceive + 1;
                                 end if;
-                                
+
                             end if;
                         else
                             -- packet (too short to interpret)
@@ -578,29 +577,29 @@ begin
                             if (iStatusCodeError /= x"00") then
                                 iErrorReply  <= '1';
                                 commandState <= commandStateWaitEOP;
-                                
+
                             elsif (iReceiveControlFlag = '1') then
                                 -- Early EOP.
                                 -- Error Code = 5.
                                 iStatusCodeError <= x"05";
                                 iErrorReply      <= '1';
                                 commandState     <= commandStateIdle;
-                                
+
                             else
                                 if ((iRMAPCommand (3 downto 2) = "01") and (iRMAPDataLength /= x"000008")) then
                                     -- only 8byte(4byte data and mask) read-modefy-write command is accepted.
                                     iStatusCodeError <= x"0a";
                                     iErrorReply      <= '1';
                                     commandState     <= commandStateIdle;
-                                    
+
                                 elsif ((iRMAPCommand (3) = '1') and (iRMAPDataLength /= x"000004")) then
                                     -- only 4byte write command is accepted.
                                     iStatusCodeError <= x"0a";
                                     iErrorReply      <= '1';
                                     commandState     <= commandStateIdle;
-                                    
+
                                 else
-                                    if (iDataCount < iRMAPDataLength) then
+                                    if (iDataCount < unsigned(iRMAPDataLength)) then
                                         iDataCount <= iDataCount + 1;
                                     else
                                         iDataCount   <= (others => '0');
@@ -615,7 +614,7 @@ begin
                                         iControlWriteDataBuffer (15 downto 8) <= iReceiveData;
                                     elsif (iDataCount (3 downto 0) = "0100") then
                                         iControlWriteDataBuffer (7 downto 0) <= iReceiveData;
-                                        ------------------------------------------------------------------      
+                                        ------------------------------------------------------------------
                                     elsif (iDataCount (3 downto 0) = "0101") then
                                         iMaskData (31 downto 24) <= iReceiveData;
                                     elsif (iDataCount (3 downto 0) = "0110") then
@@ -675,7 +674,7 @@ begin
                         end if;
 
                     ----------------------------------------------------------------------
-                    -- Deleting the Receive data until EOP,EEP of the packet with an error.  
+                    -- Deleting the Receive data until EOP,EEP of the packet with an error.
                     ----------------------------------------------------------------------
                     when commandStateWaitEOP =>
                         if (iReceiveControlFlag = '1') then
@@ -736,7 +735,7 @@ begin
 ----------------------------------------------------------------------
     process (clock, reset)
     begin
-        
+
         if (reset = '1') then
             receiveCRCState             <= receiveCRCStateIdle;
             iBusyOut                    <= '0';
@@ -745,7 +744,7 @@ begin
             iCommandCRCCalculateOut     <= (others => '0');
             iCommandCRCRomAddressBuffer <= (others => '0');
             iReceiveDataReady           <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             case receiveCRCState is
                 when receiveCRCStateIdle =>
@@ -838,7 +837,7 @@ begin
 ----------------------------------------------------------------------
     process (clock, reset)
     begin
-        
+
         if (reset = '1') then
             transmitCRCState       <= transmitCRCStateIdle;
             iStrobeOut             <= '0';
@@ -846,7 +845,7 @@ begin
             iReplyCRCAddressBuffer <= (others => '0');
             iCRCByteCalculated     <= '0';
             iwatchdogReplyTimeOut  <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             case transmitCRCState is    --20130912
 
@@ -912,7 +911,7 @@ begin
 -- ECSS-E-ST-50-11C 6.4.2 Write reply format.
 -- ECSS-E-ST-50-11C 6.5.2 Read reply format.
 -- ECSS-E-ST-50-11C 6.7 Error and status codes.
----------------------------------------------------------------------- 
+----------------------------------------------------------------------
     process (clock, reset)
     begin
         if (reset = '1') then
@@ -930,7 +929,7 @@ begin
             iRequestOut                <= '0';
             iwatchdogClear             <= '0';
             iPacketDropped             <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             case replyState is
 
@@ -1087,7 +1086,7 @@ begin
                 -- ECSS-E-ST-50-11C 6.2.17 Status field.
                 -- Set 0x00 when cmplete command normally or error code when error is occur
                 -- to Transmit buffer.
-                -- After complete calculation of the Transmit CRC,move to 
+                -- After complete calculation of the Transmit CRC,move to
                 -- replyStateTargetLogicalAddress.
                 ----------------------------------------------------------------------
                 when replyStateStatus =>
@@ -1275,7 +1274,7 @@ begin
                 when replyStateData =>
                     if (iCRCCalculatePhase = '0') then
                         iDataOutBuffer (8) <= '0';
-                        if (iReplyDataCount < iReplyDataLength) then
+                        if (iReplyDataCount < unsigned(iReplyDataLength)) then
                             iReplyDataCount <= iReplyDataCount + 1;
                         end if;
                         if (iReplyDataCount (2 downto 0) = "000") then
@@ -1297,7 +1296,7 @@ begin
                             replyState         <= replyStateIdle;
                         elsif (iCRCByteCalculated = '1') then
                             iCRCCalculatePhase <= '0';
-                            if (iReplyDataCount < iReplyDataLength) then
+                            if (iReplyDataCount < unsigned(iReplyDataLength)) then
                                 replyState <= replyStateData;
                             else
                                 replyState <= replyStateDataCRC;
@@ -1435,7 +1434,7 @@ begin
                     busState                 <= busStateWrite0;
 
                 ----------------------------------------------------------------------
-                -- Wait AcknowledgeIn from busMaster. 
+                -- Wait AcknowledgeIn from busMaster.
                 -- Move to busStateIdle.
                 ----------------------------------------------------------------------
                 when busStateWrite0 =>
@@ -1449,7 +1448,7 @@ begin
                 when others => null;
             end case;
         end if;
-        
+
     end process;
 
     busMasterAddressOut     <= iBusMasterAddressOut;
@@ -1457,8 +1456,8 @@ begin
     busMasterByteEnableOut  <= iBusMasterByteEnableOut;
     busMasterWriteEnableOut <= iBusMasterWriteEnableOut;
     busMasterCycleOut       <= iBusMasterCycleOut;
-    
-    
+
+
     watchdogTimerCount : SpaceWireRouterIPTimeOutCount port map (
         clock             => clock,
         reset             => reset,
@@ -1480,5 +1479,3 @@ begin
         );
 
 end behavioral;
-
-

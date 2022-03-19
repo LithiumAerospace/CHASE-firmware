@@ -27,9 +27,7 @@ use work.SpaceWireRouterIPPackage.all;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
-
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPRouterRoutingTable32x256 is
     port (
@@ -73,7 +71,7 @@ architecture behavioral of SpaceWireRouterIPRouterRoutingTable32x256 is
     signal iReadData            : std_logic_vector (31 downto 0);
     signal ramDataOut           : std_logic_vector (31 downto 0);
     signal iWriteData           : std_logic_vector (31 downto 0);
-    
+
     type BusStateMachine is (
         busStateIdle,
         busStateWrite0,
@@ -87,7 +85,7 @@ architecture behavioral of SpaceWireRouterIPRouterRoutingTable32x256 is
         busStateWait3
         );
     signal iBusState : BusStateMachine;
-    
+
 begin
 
 --------------------------------------------------------------------------------
@@ -134,7 +132,7 @@ begin
             iReadData            <= (others => '0');
             iWriteData           <= (others => '0');
             iWriteEnableRegister <= '0';
-            
+
         elsif (clock'event and clock = '1') then
             case iBusState is
                 when busStateIdle =>

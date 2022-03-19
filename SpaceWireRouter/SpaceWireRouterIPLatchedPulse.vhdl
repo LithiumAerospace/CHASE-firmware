@@ -25,8 +25,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity SpaceWireRouterIPLatchedPulse is
     port (
@@ -43,7 +41,7 @@ architecture Behavioral of SpaceWireRouterIPLatchedPulse is
 
     signal iLatchedAsynchronous : std_logic;
     signal iLatchedOut          : std_logic;
-    
+
 begin
 
     latchedOut <= iLatchedOut;

@@ -25,8 +25,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.SpaceWireCODECIPPackage.all;
@@ -37,7 +36,7 @@ entity SpaceWireCODECIPLinkInterface is
         gDisconnectCountValue     : integer                       := 141;
         gTimer6p4usValue          : integer                       := 640;
         gTimer12p8usValue         : integer                       := 1280;
-        gTransmitClockDivideValue : std_logic_vector (5 downto 0) := "001001"
+        gTransmitClockDivideValue : unsigned (5 downto 0) := "001001"
         );
     port (
         clock                       : in  std_logic;
@@ -59,9 +58,9 @@ entity SpaceWireCODECIPLinkInterface is
         transmitData                : in  std_logic_vector (7 downto 0);
         transmitDataControlFlag     : in  std_logic;
         transmitReady               : out std_logic;
-        transmitClockDivideValue    : in  std_logic_vector(5 downto 0);
-        creditCount                 : out std_logic_vector (5 downto 0);
-        outstndingCount             : out std_logic_vector (5 downto 0);
+        transmitClockDivideValue    : in  unsigned (5 downto 0);
+        creditCount                 : out unsigned (5 downto 0);
+        outstndingCount             : out unsigned (5 downto 0);
         -- receiver.
         receiveClock                : in  std_logic;
         tickOut                     : out std_logic;
@@ -70,7 +69,7 @@ entity SpaceWireCODECIPLinkInterface is
         receiveFIFOWriteEnable1     : out std_logic;
         receiveData                 : out std_logic_vector (7 downto 0);
         receiveDataControlFlag      : out std_logic;
-        receiveFIFOCount            : in  std_logic_vector(5 downto 0);
+        receiveFIFOCount            : in  unsigned (5 downto 0);
         -- serial i/o.
         spaceWireDataOut            : out std_logic;
         spaceWireStrobeOut          : out std_logic;
@@ -116,7 +115,7 @@ architecture Behavioral of SpaceWireCODECIPLinkInterface is
 
     component SpaceWireCODECIPTransmitter
         generic (
-            gInitializeTransmitClockDivideValue : std_logic_vector (5 downto 0) := "001001"
+            gInitializeTransmitClockDivideValue : unsigned (5 downto 0) := "001001"
             );
         port (
             transmitClock            : in  std_logic;
@@ -139,11 +138,11 @@ architecture Behavioral of SpaceWireCODECIPLinkInterface is
             sendTimeCodes            : in  std_logic;
             gotFCT                   : in  std_logic;
             gotNCharacter            : in  std_logic;
-            receiveFIFOCount         : in  std_logic_vector(5 downto 0);
+            receiveFIFOCount         : in  unsigned (5 downto 0);
             creditError              : out std_logic;
-            transmitClockDivide      : in  std_logic_vector(5 downto 0);
-            creditCountOut           : out std_logic_vector (5 downto 0);
-            outstandingCountOut      : out std_logic_vector (5 downto 0);
+            transmitClockDivide      : in  unsigned (5 downto 0);
+            creditCountOut           : out unsigned (5 downto 0);
+            outstandingCountOut      : out unsigned (5 downto 0);
             spaceWireResetOut        : in  std_logic;
             transmitEEPAsynchronous  : out std_logic;
             transmitEOPAsynchronous  : out std_logic;
@@ -332,7 +331,7 @@ begin
             transmitDataControlFlag  => transmitDataControlFlag,
             transmitReady            => transmitReady,
             enableTransmit           => enableTransmit,
-            --autoStart.     
+            --autoStart.
             sendNulls                => sendNulls,
             sendFCTs                 => sendFCTs,
             sendNCharacters          => sendNCharactors,
@@ -434,7 +433,7 @@ begin
             timeOut            => timeOut,
             controlFlagsOut    => controlFlagsOut,
             tickOut            => tickOut
-            );          
+            );
 
 
     receiveFIFOWriteEnable1  <= iReceiveFIFOWriteEnable1;

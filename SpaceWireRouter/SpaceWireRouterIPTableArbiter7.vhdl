@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPTableArbiter7 is
     port (
@@ -76,7 +75,7 @@ begin
                 end if;
 
             ----------------------------------------------------------------------
-            -- The arbitration after Port1is complete to access.
+            -- The arbitration after Port1 is complete to access.
             ----------------------------------------------------------------------
             elsif (iGranted (1) = '1' and request (1) = '0') then
                 if (request (2) = '1') then
@@ -219,5 +218,5 @@ begin
     end process;
 
     granted <= iGranted;
-    
+
 end behavioral;

@@ -28,9 +28,7 @@ use work.SpaceWireCODECIPPackage.all;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
-
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIP is
     generic (
@@ -135,7 +133,7 @@ architecture behavioral of SpaceWireRouterIP is
             dataIn                      : in  std_logic_vector (8 downto 0);
             strobeIn                    : in  std_logic;
             readyOut                    : out std_logic;
-            -- routing table read i/f. 
+            -- routing table read i/f.
             busMasterAddressOut         : out std_logic_vector (31 downto 0);
             busMasterDataIn             : in  std_logic_vector (31 downto 0);
             busMasterDataOut            : out std_logic_vector (31 downto 0);
@@ -156,9 +154,9 @@ architecture behavioral of SpaceWireRouterIP is
             linkReset                   : in  std_logic;
             linkStatus                  : out std_logic_vector (15 downto 0);
             errorStatus                 : out std_logic_vector (7 downto 0);
-            transmitClockDivide         : in  std_logic_vector (5 downto 0);
-            creditCount                 : out std_logic_vector (5 downto 0);
-            outstandingCount            : out std_logic_vector (5 downto 0);
+            transmitClockDivide         : in  unsigned (5 downto 0);
+            creditCount                 : out unsigned (5 downto 0);
+            outstandingCount            : out unsigned (5 downto 0);
             -- SpaceWire Data-Strobe.
             spaceWireDataOut            : out std_logic;
             spaceWireStrobeOut          : out std_logic;
@@ -231,38 +229,38 @@ architecture behavioral of SpaceWireRouterIP is
 --
             watchdogTimeOut0      : in  std_logic;
             packetDropped0        : in  std_logic;
-            watchdogTimeOutCount0 : out std_logic_vector (15 downto 0);
-            dropCount0            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount0 : out unsigned (15 downto 0);
+            dropCount0            : out unsigned (15 downto 0);
 --
             watchdogTimeOut1      : in  std_logic;
             packetDropped1        : in  std_logic;
-            watchdogTimeOutCount1 : out std_logic_vector (15 downto 0);
-            dropCount1            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount1 : out unsigned (15 downto 0);
+            dropCount1            : out unsigned (15 downto 0);
 --
             watchdogTimeOut2      : in  std_logic;
             packetDropped2        : in  std_logic;
-            watchdogTimeOutCount2 : out std_logic_vector (15 downto 0);
-            dropCount2            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount2 : out unsigned (15 downto 0);
+            dropCount2            : out unsigned (15 downto 0);
 --
             watchdogTimeOut3      : in  std_logic;
             packetDropped3        : in  std_logic;
-            watchdogTimeOutCount3 : out std_logic_vector (15 downto 0);
-            dropCount3            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount3 : out unsigned (15 downto 0);
+            dropCount3            : out unsigned (15 downto 0);
 --
             watchdogTimeOut4      : in  std_logic;
             packetDropped4        : in  std_logic;
-            watchdogTimeOutCount4 : out std_logic_vector (15 downto 0);
-            dropCount4            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount4 : out unsigned (15 downto 0);
+            dropCount4            : out unsigned (15 downto 0);
 --
             watchdogTimeOut5      : in  std_logic;
             packetDropped5        : in  std_logic;
-            watchdogTimeOutCount5 : out std_logic_vector (15 downto 0);
-            dropCount5            : out std_logic_vector (15 downto 0);
+            watchdogTimeOutCount5 : out unsigned (15 downto 0);
+            dropCount5            : out unsigned (15 downto 0);
 ---
             watchdogTimeOut6      : in  std_logic;
             packetDropped6        : in  std_logic;
-            watchdogTimeOutCount6 : out std_logic_vector (15 downto 0);
-            dropCount6            : out std_logic_vector (15 downto 0)
+            watchdogTimeOutCount6 : out unsigned (15 downto 0);
+            dropCount6            : out unsigned (15 downto 0)
             );
     end component;
 
@@ -274,20 +272,20 @@ architecture behavioral of SpaceWireRouterIP is
     signal packetDropped4   : std_logic;
     signal packetDropped5   : std_logic;
     signal packetDropped6   : std_logic;
-    signal timeOutCount0    : std_logic_vector (15 downto 0);
-    signal timeOutCount1    : std_logic_vector (15 downto 0);
-    signal timeOutCount2    : std_logic_vector (15 downto 0);
-    signal timeOutCount3    : std_logic_vector (15 downto 0);
-    signal timeOutCount4    : std_logic_vector (15 downto 0);
-    signal timeOutCount5    : std_logic_vector (15 downto 0);
-    signal timeOutCount6    : std_logic_vector (15 downto 0);
-    signal packetDropCount0 : std_logic_vector (15 downto 0);
-    signal packetDropCount1 : std_logic_vector (15 downto 0);
-    signal packetDropCount2 : std_logic_vector (15 downto 0);
-    signal packetDropCount3 : std_logic_vector (15 downto 0);
-    signal packetDropCount4 : std_logic_vector (15 downto 0);
-    signal packetDropCount5 : std_logic_vector (15 downto 0);
-    signal packetDropCount6 : std_logic_vector (15 downto 0);
+    signal timeOutCount0    : unsigned (15 downto 0);
+    signal timeOutCount1    : unsigned (15 downto 0);
+    signal timeOutCount2    : unsigned (15 downto 0);
+    signal timeOutCount3    : unsigned (15 downto 0);
+    signal timeOutCount4    : unsigned (15 downto 0);
+    signal timeOutCount5    : unsigned (15 downto 0);
+    signal timeOutCount6    : unsigned (15 downto 0);
+    signal packetDropCount0 : unsigned (15 downto 0);
+    signal packetDropCount1 : unsigned (15 downto 0);
+    signal packetDropCount2 : unsigned (15 downto 0);
+    signal packetDropCount3 : unsigned (15 downto 0);
+    signal packetDropCount4 : unsigned (15 downto 0);
+    signal packetDropCount5 : unsigned (15 downto 0);
+    signal packetDropCount6 : unsigned (15 downto 0);
 
 
 
@@ -299,10 +297,10 @@ architecture behavioral of SpaceWireRouterIP is
             clock                       : in  std_logic;
             transmitClock               : in  std_logic;
             reset                       : in  std_logic;
-            creditCount                 : in  std_logic_vector (5 downto 0);
-            outstndingCount             : in  std_logic_vector (5 downto 0);
-            creditCountSynchronized     : out std_logic_vector (5 downto 0);
-            outstndingCountSynchronized : out std_logic_vector (5 downto 0)
+            creditCount                 : in  unsigned (5 downto 0);
+            outstndingCount             : in  unsigned (5 downto 0);
+            creditCountSynchronized     : out unsigned (5 downto 0);
+            outstndingCountSynchronized : out unsigned (5 downto 0)
             );
     end component;
 
@@ -417,30 +415,30 @@ architecture behavioral of SpaceWireRouterIP is
     signal port5LinkControl                  : std_logic_vector (15 downto 0);
     signal port6LinkControl                  : std_logic_vector (15 downto 0);
 --
-    signal port1CreditCount                  : std_logic_vector (5 downto 0);
-    signal port1OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port1CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port1OutstandingCountSynchronized : std_logic_vector (5 downto 0);
-    signal port2CreditCount                  : std_logic_vector (5 downto 0);
-    signal port2OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port2CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port2OutstandingCountSynchronized : std_logic_vector (5 downto 0);
-    signal port3CreditCount                  : std_logic_vector (5 downto 0);
-    signal port3OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port3CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port3OutstandingCountSynchronized : std_logic_vector (5 downto 0);
-    signal port4CreditCount                  : std_logic_vector (5 downto 0);
-    signal port4OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port4CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port4OutstandingCountSynchronized : std_logic_vector (5 downto 0);
-    signal port5CreditCount                  : std_logic_vector (5 downto 0);
-    signal port5OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port5CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port5OutstandingCountSynchronized : std_logic_vector (5 downto 0);
-    signal port6CreditCount                  : std_logic_vector (5 downto 0);
-    signal port6OutstandingCount             : std_logic_vector (5 downto 0);
-    signal port6CreditCountSynchronized      : std_logic_vector (5 downto 0);
-    signal port6OutstandingCountSynchronized : std_logic_vector (5 downto 0);
+    signal port1CreditCount                  : unsigned (5 downto 0);
+    signal port1OutstandingCount             : unsigned (5 downto 0);
+    signal port1CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port1OutstandingCountSynchronized : unsigned (5 downto 0);
+    signal port2CreditCount                  : unsigned (5 downto 0);
+    signal port2OutstandingCount             : unsigned (5 downto 0);
+    signal port2CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port2OutstandingCountSynchronized : unsigned (5 downto 0);
+    signal port3CreditCount                  : unsigned (5 downto 0);
+    signal port3OutstandingCount             : unsigned (5 downto 0);
+    signal port3CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port3OutstandingCountSynchronized : unsigned (5 downto 0);
+    signal port4CreditCount                  : unsigned (5 downto 0);
+    signal port4OutstandingCount             : unsigned (5 downto 0);
+    signal port4CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port4OutstandingCountSynchronized : unsigned (5 downto 0);
+    signal port5CreditCount                  : unsigned (5 downto 0);
+    signal port5OutstandingCount             : unsigned (5 downto 0);
+    signal port5CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port5OutstandingCountSynchronized : unsigned (5 downto 0);
+    signal port6CreditCount                  : unsigned (5 downto 0);
+    signal port6OutstandingCount             : unsigned (5 downto 0);
+    signal port6CreditCountSynchronized      : unsigned (5 downto 0);
+    signal port6OutstandingCountSynchronized : unsigned (5 downto 0);
 --
     signal timeOutEnable                     : std_logic;
     signal timeOutCountValue                 : std_logic_vector (19 downto 0);
@@ -474,7 +472,7 @@ architecture behavioral of SpaceWireRouterIP is
 --
     signal autoTimeCodeValue                 : std_logic_vector(7 downto 0);
     signal autoTimeCodeCycleTime             : std_logic_vector(31 downto 0);
---  
+--
     signal statisticalInformation1           : bit32X8Array;
     signal statisticalInformation2           : bit32X8Array;
     signal statisticalInformation3           : bit32X8Array;
@@ -541,33 +539,33 @@ architecture behavioral of SpaceWireRouterIP is
             errorStatus6                : in  std_logic_vector (7 downto 0);
             linkReset6                  : out std_logic;
 --
-            creditCount1                : in  std_logic_vector (5 downto 0);
-            creditCount2                : in  std_logic_vector (5 downto 0);
-            creditCount3                : in  std_logic_vector (5 downto 0);
-            creditCount4                : in  std_logic_vector (5 downto 0);
-            creditCount5                : in  std_logic_vector (5 downto 0);
-            creditCount6                : in  std_logic_vector (5 downto 0);
-            outstandingCount1           : in  std_logic_vector (5 downto 0);
-            outstandingCount2           : in  std_logic_vector (5 downto 0);
-            outstandingCount3           : in  std_logic_vector (5 downto 0);
-            outstandingCount4           : in  std_logic_vector (5 downto 0);
-            outstandingCount5           : in  std_logic_vector (5 downto 0);
-            outstandingCount6           : in  std_logic_vector (5 downto 0);
-            timeOutCount0               : in  std_logic_vector (15 downto 0);
-            timeOutCount1               : in  std_logic_vector (15 downto 0);
-            timeOutCount2               : in  std_logic_vector (15 downto 0);
-            timeOutCount3               : in  std_logic_vector (15 downto 0);
-            timeOutCount4               : in  std_logic_vector (15 downto 0);
-            timeOutCount5               : in  std_logic_vector (15 downto 0);
-            timeOutCount6               : in  std_logic_vector (15 downto 0);
+            creditCount1                : in  unsigned (5 downto 0);
+            creditCount2                : in  unsigned (5 downto 0);
+            creditCount3                : in  unsigned (5 downto 0);
+            creditCount4                : in  unsigned (5 downto 0);
+            creditCount5                : in  unsigned (5 downto 0);
+            creditCount6                : in  unsigned (5 downto 0);
+            outstandingCount1           : in  unsigned (5 downto 0);
+            outstandingCount2           : in  unsigned (5 downto 0);
+            outstandingCount3           : in  unsigned (5 downto 0);
+            outstandingCount4           : in  unsigned (5 downto 0);
+            outstandingCount5           : in  unsigned (5 downto 0);
+            outstandingCount6           : in  unsigned (5 downto 0);
+            timeOutCount0               : in  unsigned (15 downto 0);
+            timeOutCount1               : in  unsigned (15 downto 0);
+            timeOutCount2               : in  unsigned (15 downto 0);
+            timeOutCount3               : in  unsigned (15 downto 0);
+            timeOutCount4               : in  unsigned (15 downto 0);
+            timeOutCount5               : in  unsigned (15 downto 0);
+            timeOutCount6               : in  unsigned (15 downto 0);
 --
-            dropCount0                  : in  std_logic_vector (15 downto 0);
-            dropCount1                  : in  std_logic_vector (15 downto 0);
-            dropCount2                  : in  std_logic_vector (15 downto 0);
-            dropCount3                  : in  std_logic_vector (15 downto 0);
-            dropCount4                  : in  std_logic_vector (15 downto 0);
-            dropCount5                  : in  std_logic_vector (15 downto 0);
-            dropCount6                  : in  std_logic_vector (15 downto 0);
+            dropCount0                  : in  unsigned (15 downto 0);
+            dropCount1                  : in  unsigned (15 downto 0);
+            dropCount2                  : in  unsigned (15 downto 0);
+            dropCount3                  : in  unsigned (15 downto 0);
+            dropCount4                  : in  unsigned (15 downto 0);
+            dropCount5                  : in  unsigned (15 downto 0);
+            dropCount6                  : in  unsigned (15 downto 0);
             dropCouterClear             : out std_logic;
 --
             timeOutEnable               : out std_logic;
@@ -582,7 +580,7 @@ architecture behavioral of SpaceWireRouterIP is
 --
             autoTimeCodeValue           : in  std_logic_vector(7 downto 0);
             autoTimeCodeCycleTime       : out std_logic_vector(31 downto 0);
---            
+--
             statisticalInformation1     : in  bit32X8Array;
             statisticalInformation2     : in  bit32X8Array;
             statisticalInformation3     : in  bit32X8Array;
@@ -658,7 +656,7 @@ architecture behavioral of SpaceWireRouterIP is
     end component;
 
 begin
-    
+
     oneShotStatusPort1 <= port1LinkStatus (15 downto 8);
     oneShotStatusPort2 <= port2LinkStatus (15 downto 8);
     oneShotStatusPort3 <= port3LinkStatus (15 downto 8);
@@ -871,7 +869,7 @@ begin
             linkDisable                 => port1LinkControl (1),
             autoStart                   => port1LinkControl (2),
             linkReset                   => port1LinkReset,
-            transmitClockDivide         => port1LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port1LinkControl (13 downto 8)),
             linkStatus                  => port1LinkStatus,
             errorStatus                 => port1ErrorStatus,
             creditCount                 => port1CreditCount,
@@ -881,7 +879,7 @@ begin
             spaceWireStrobeOut          => spaceWireStrobeOut1,
             spaceWireDataIn             => spaceWireDataIn1,
             spaceWireStrobeIn           => spaceWireStrobeIn1,
---                              
+--
             statisticalInformationClear => statisticalInformationClear,
             statisticalInformation      => statisticalInformation1
             );
@@ -937,7 +935,7 @@ begin
             linkDisable                 => port2LinkControl (1),
             autoStart                   => port2LinkControl (2),
             linkReset                   => port2LinkReset,
-            transmitClockDivide         => port2LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port2LinkControl (13 downto 8)),
             linkStatus                  => port2LinkStatus,
             errorStatus                 => port2ErrorStatus,
             creditCount                 => port2CreditCount,
@@ -1003,7 +1001,7 @@ begin
             linkDisable                 => port3LinkControl (1),
             autoStart                   => port3LinkControl (2),
             linkReset                   => port3LinkReset,
-            transmitClockDivide         => port3LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port3LinkControl (13 downto 8)),
             linkStatus                  => port3LinkStatus,
             errorStatus                 => port3ErrorStatus,
             creditCount                 => port3CreditCount,
@@ -1069,7 +1067,7 @@ begin
             linkDisable                 => port4LinkControl (1),
             autoStart                   => port4LinkControl (2),
             linkReset                   => port4LinkReset,
-            transmitClockDivide         => port4LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port4LinkControl (13 downto 8)),
             linkStatus                  => port4LinkStatus,
             errorStatus                 => port4ErrorStatus,
             creditCount                 => port4CreditCount,
@@ -1135,7 +1133,7 @@ begin
             linkDisable                 => port5LinkControl (1),
             autoStart                   => port5LinkControl (2),
             linkReset                   => port5LinkReset,
-            transmitClockDivide         => port5LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port5LinkControl (13 downto 8)),
             linkStatus                  => port5LinkStatus,
             errorStatus                 => port5ErrorStatus,
             creditCount                 => port5CreditCount,
@@ -1201,7 +1199,7 @@ begin
             linkDisable                 => port6LinkControl (1),
             autoStart                   => port6LinkControl (2),
             linkReset                   => port6LinkReset,
-            transmitClockDivide         => port6LinkControl (13 downto 8),
+            transmitClockDivide         => unsigned(port6LinkControl (13 downto 8)),
             linkStatus                  => port6LinkStatus,
             errorStatus                 => port6ErrorStatus,
             creditCount                 => port6CreditCount,
@@ -1433,7 +1431,7 @@ begin
 --
             autoTimeCodeValue           => autoTimeCodeValue,
             autoTimeCodeCycleTime       => autoTimeCodeCycleTime,
---          
+--
             statisticalInformation1     => statisticalInformation1,
             statisticalInformation2     => statisticalInformation2,
             statisticalInformation3     => statisticalInformation3,

@@ -24,8 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPStatisticsCounter7 is
     port (
@@ -35,38 +34,38 @@ entity SpaceWireRouterIPStatisticsCounter7 is
 --
         watchdogTimeOut0      : in  std_logic;
         packetDropped0        : in  std_logic;
-        watchdogTimeOutCount0 : out std_logic_vector (15 downto 0);
-        dropCount0            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount0 : out unsigned (15 downto 0);
+        dropCount0            : out unsigned (15 downto 0);
 --
         watchdogTimeOut1      : in  std_logic;
         packetDropped1        : in  std_logic;
-        watchdogTimeOutCount1 : out std_logic_vector (15 downto 0);
-        dropCount1            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount1 : out unsigned (15 downto 0);
+        dropCount1            : out unsigned (15 downto 0);
 --
         watchdogTimeOut2      : in  std_logic;
         packetDropped2        : in  std_logic;
-        watchdogTimeOutCount2 : out std_logic_vector (15 downto 0);
-        dropCount2            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount2 : out unsigned (15 downto 0);
+        dropCount2            : out unsigned (15 downto 0);
 --
         watchdogTimeOut3      : in  std_logic;
         packetDropped3        : in  std_logic;
-        watchdogTimeOutCount3 : out std_logic_vector (15 downto 0);
-        dropCount3            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount3 : out unsigned (15 downto 0);
+        dropCount3            : out unsigned (15 downto 0);
 --
         watchdogTimeOut4      : in  std_logic;
         packetDropped4        : in  std_logic;
-        watchdogTimeOutCount4 : out std_logic_vector (15 downto 0);
-        dropCount4            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount4 : out unsigned (15 downto 0);
+        dropCount4            : out unsigned (15 downto 0);
 --
         watchdogTimeOut5      : in  std_logic;
         packetDropped5        : in  std_logic;
-        watchdogTimeOutCount5 : out std_logic_vector (15 downto 0);
-        dropCount5            : out std_logic_vector (15 downto 0);
+        watchdogTimeOutCount5 : out unsigned (15 downto 0);
+        dropCount5            : out unsigned (15 downto 0);
 --
         watchdogTimeOut6      : in  std_logic;
         packetDropped6        : in  std_logic;
-        watchdogTimeOutCount6 : out std_logic_vector (15 downto 0);
-        dropCount6            : out std_logic_vector (15 downto 0)
+        watchdogTimeOutCount6 : out unsigned (15 downto 0);
+        dropCount6            : out unsigned (15 downto 0)
         );
 end SpaceWireRouterIPStatisticsCounter7;
 
@@ -78,7 +77,7 @@ architecture behavioral of SpaceWireRouterIPStatisticsCounter7 is
             reset        : in  std_logic;
             counterClear : in  std_logic;
             countEnable  : in  std_logic;
-            count        : out std_logic_vector (15 downto 0)
+            count        : out unsigned (15 downto 0)
             );
     end component;
 
@@ -137,11 +136,9 @@ begin
 end behavioral;
 
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPStatisticCounter is
     port (
@@ -149,13 +146,13 @@ entity SpaceWireRouterIPStatisticCounter is
         reset        : in  std_logic;
         counterClear : in  std_logic;
         countEnable  : in  std_logic;
-        count        : out std_logic_vector (15 downto 0)
+        count        : out unsigned (15 downto 0)
         );
 end SpaceWireRouterIPStatisticCounter;
 
 architecture behavioral of SpaceWireRouterIPStatisticCounter is
 
-    signal iCount : std_logic_vector (15 downto 0);
+    signal iCount : unsigned (15 downto 0);
 
 begin
 
@@ -179,5 +176,5 @@ begin
     end process;
 
     count <= iCount;
-    
+
 end behavioral;

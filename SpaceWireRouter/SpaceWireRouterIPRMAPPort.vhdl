@@ -24,9 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
-
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPRMAPPort is
     generic (
@@ -75,8 +73,8 @@ end SpaceWireRouterIPRMAPPort;
 
 
 architecture behavioral of SpaceWireRouterIPRMAPPort is
-    
-    
+
+
     component SpaceWireRouterIPRMAPDecoder is
         port (
             clock                   : in  std_logic;
@@ -120,9 +118,9 @@ architecture behavioral of SpaceWireRouterIPRMAPPort is
     signal iRMAPStrobeIn     : std_logic;
     signal busMasterCycleOut : std_logic;
     signal destinationPort   : std_logic_vector (7 downto 0);
-    
+
 begin
-    
+
     iRMAPStrobeIn <= requestIn and strobeIn;
 
     RMAPTargetDecoder : SpaceWireRouterIPRMAPDecoder
@@ -169,7 +167,6 @@ begin
     busMasterOriginalPort <= destinationPort;
     destinationPortOut    <= destinationPort;
     sorcePortOut          <= gPortNumber;
-    
-    
-end behavioral;
 
+
+end behavioral;

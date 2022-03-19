@@ -25,8 +25,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 
 entity SpaceWireRouterIPLatchedPulse8 is
     port (
@@ -41,7 +40,7 @@ entity SpaceWireRouterIPLatchedPulse8 is
 end SpaceWireRouterIPLatchedPulse8;
 
 architecture Behavioral of SpaceWireRouterIPLatchedPulse8 is
-    
+
     component SpaceWireRouterIPLatchedPulse is
         port (
             clock             : in  std_logic;
@@ -52,12 +51,12 @@ architecture Behavioral of SpaceWireRouterIPLatchedPulse8 is
             latchClear        : in  std_logic
             );
     end component;
-    
+
 begin
 
 ----------------------------------------------------------------------
--- Latch "H" of SpaceWireErrorStatus signal. 
--- Clear the latch clear with latchClear, when read Link Control or 
+-- Latch "H" of SpaceWireErrorStatus signal.
+-- Clear the latch clear with latchClear, when read Link Control or
 -- Status Register.
 ----------------------------------------------------------------------
 
@@ -82,5 +81,5 @@ begin
 
     latchedOut(3) <= asynchronousIn(3);
     latchedOut(7) <= asynchronousIn(7);
-    
+
 end Behavioral;
