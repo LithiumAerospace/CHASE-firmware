@@ -1,0 +1,34 @@
+SOURCES=\
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPReceiverSynchronize.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTimeCodeControl.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPFIFO9x64.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPStateMachine.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTimer.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPPackage.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPLinkInterface.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPStatisticalInformationCount.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTransmitter.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIPSynchronizeOnePulse.vhdl \
+	$(DIR)SpaceWireCODEC/SpaceWireCODECIP.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPLatchedPulse.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPStatistics.vhdl \
+  $(DIR)SpaceWireRouter/SpaceWireRouterIPPackage.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTableArbiter7.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPRMAPDecoder.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeCodeControl6.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPArbiter7x7.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPRMAPPort.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeOutCount.vhdl \
+  $(DIR)SpaceWireRouter/SpaceWireRouterIPConfigurationPackage.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPRouterControlRegister.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeOutEEP.vhdl \
+  $(DIR)SpaceWireRouter/SpaceWireRouterIPCreditCount.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPRouterRoutingTable32x256.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIP.vhdl \
+  $(DIR)SpaceWireRouter/SpaceWireRouterIPLatchedPulse8.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPSpaceWirePort.vhdl \
+	$(DIR)SpaceWireRouter/MockCRCRom.vhdl
+	#$(DIR)SpaceWireRouter/Altera/SpaceWireRouterIPCRCRomAltera.vhdl \
+	#$(DIR)SpaceWireRouter/Altera/SpaceWireRouterIPRam32x256Altera.vhdl \
+	#$(DIR)SpaceWireRouter/Xilinx/SpaceWireRouterIPCRCRomXilinx.vhdl \
+	#$(DIR)SpaceWireRouter/Xilinx/SpaceWireRouterIPRam32x256Xilinx.vhdl \

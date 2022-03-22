@@ -207,6 +207,14 @@ architecture behavioral of SpaceWireRouterIPRMAPDecoder is
             );
     end component;
 
+    component MockCRCRom is
+        port (
+            clock    : in  std_logic;
+            address  : in  std_logic_vector (8 downto 0);
+            readData : out std_logic_vector (7 downto 0)
+            );
+    end component;
+
 
     signal iCommandCRCCalculateOut     : std_logic_vector (7 downto 0);
     signal iCommandCRCRomAddressBuffer : std_logic_vector (7 downto 0);
@@ -726,6 +734,19 @@ begin
                 );
     end generate;
 
+----------------------------------------------------------------------
+-- Mock.
+----------------------------------------------------------------------
+
+    receiveCRCRomMockGenerate : if cUseDevice = 2 generate
+        receiveCRCRomMock : MockCRCRom
+            port map (
+                clock    => clock,
+                address  => iCommandCRCRomAddress,
+                readData => commandCRCCalculateDataOut
+                );
+    end generate;
+
 --------------------------------------------------------------------------------
 
 
@@ -828,6 +849,18 @@ begin
                 );
     end generate;
 
+----------------------------------------------------------------------
+-- Mock.
+----------------------------------------------------------------------
+
+    transmitCRCRomMockGenerate : if cUseDevice = 2 generate
+        transmitCRCRomMock : MockCRCRom
+            port map (
+                clock    => clock,
+                address  => iReplyCRCRomAddress,
+                readData => replyCRCCalculateDataOut
+                );
+    end generate;
 --------------------------------------------------------------------------------
 
 
