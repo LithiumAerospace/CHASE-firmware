@@ -4,4 +4,4 @@ sim_build
 results.xml
 tester
 e~*
-results.vhd
+results.ghw

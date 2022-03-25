@@ -1,6 +1,7 @@
 SIM ?= GHDL
 TOPLEVEL_LANG ?=vhdl
-SIM_ARGS ?= --vcd=results.vhd
+SIM_ARGS ?= --wave=results.ghw
+COMPILE_ARGS = --std=08 -frelaxed
 
 include ../sources.mk
 
