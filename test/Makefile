@@ -4,10 +4,11 @@ SIM_ARGS ?= --wave=results.ghw
 COMPILE_ARGS = --std=08 -frelaxed
 
 include ../sources.mk
+include ../SpaceWireCODEC/sources.mk
 
 DIR = ../
 
-VHDL_SOURCES += $(SOURCES) LinkTest.vhdl
+VHDL_SOURCES += $(addprefix ../SpaceWireCODEC/, $(SPACEWIRECODEC_SOURCES)) $(SOURCES) LinkTest.vhdl
 
 TOPLEVEL = tester
 

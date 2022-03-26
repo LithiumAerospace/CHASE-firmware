@@ -1,22 +1,11 @@
 SOURCES=\
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPReceiverSynchronize.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTimeCodeControl.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPFIFO9x64.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPStateMachine.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTimer.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPPackage.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPLinkInterface.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPStatisticalInformationCount.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPTransmitter.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIPSynchronizeOnePulse.vhdl \
-	$(DIR)SpaceWireCODEC/SpaceWireCODECIP.vhdl \
 	$(DIR)SpaceWireRouter/SpaceWireRouterIPLatchedPulse.vhdl \
 	$(DIR)SpaceWireRouter/SpaceWireRouterIPStatistics.vhdl \
   $(DIR)SpaceWireRouter/SpaceWireRouterIPPackage.vhdl \
-	$(DIR)SpaceWireRouter/SpaceWireRouterIPTableArbiter7.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTableArbiter.vhdl \
 	$(DIR)SpaceWireRouter/SpaceWireRouterIPRMAPDecoder.vhdl \
-	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeCodeControl6.vhdl \
-	$(DIR)SpaceWireRouter/SpaceWireRouterIPArbiter7x7.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeCodeControl.vhdl \
+	$(DIR)SpaceWireRouter/SpaceWireRouterIPArbiter.vhdl \
 	$(DIR)SpaceWireRouter/SpaceWireRouterIPRMAPPort.vhdl \
 	$(DIR)SpaceWireRouter/SpaceWireRouterIPTimeOutCount.vhdl \
   $(DIR)SpaceWireRouter/SpaceWireRouterIPConfigurationPackage.vhdl \
